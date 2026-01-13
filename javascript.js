@@ -7,24 +7,14 @@ function getComputerChoice() {
   if (a > 0.66) return 'scissors';
 }
 
-function getHumanChoice() {
-  const b = prompt('Write rock, paper or scissors').toLowerCase();
-  if (b === 'rock') return 'rock';
-
-  if (b === 'paper') return 'paper';
-
-  if (b === 'scissors') return 'scissors';
-
-  return 'ERROR';
-}
 let humanScore = 0;
 let computerScore = 0;
-
+let gameOver = false;
 function playRound(humanChoice, computerChoice) {
   console.log('humanChoice', humanChoice);
   console.log('computerChoice', computerChoice);
   if (humanChoice === computerChoice) {
-    return `Draft! Your choice is ${humanChoice}, computer choice is ${computerChoice}`;
+    return `Draw! Your choice is ${humanChoice}, computer choice is ${computerChoice}`;
   }
 
   if (humanChoice === 'rock' && computerChoice === 'scissors') {
@@ -54,14 +44,24 @@ function playRound(humanChoice, computerChoice) {
 
   return 'Your input was not correct.';
 }
-
-function playGame() {
-  console.log(playRound(getHumanChoice(), getComputerChoice()));
-  console.log('Human ', humanScore, 'Computer ', computerScore);
+function playGame(humanChoice) {
+  if (gameOver) return;
+  const computerChoice = getComputerChoice();
+  const roundResult = playRound(humanChoice, computerChoice);
+  let result = document.querySelector('.result');
+  result.textContent = ` ${roundResult} | You ${humanScore}, Computer ${computerScore} `;
+  let win = document.querySelector('.win');
+  if (humanScore === 5) {
+    win.textContent = 'You win!!!!';
+    gameOver = true;
+  } else if (computerScore === 5) {
+    win.textContent = 'Computer win((((((';
+    gameOver = true;
+  }
 }
-
-console.log(playGame());
-console.log(playGame());
-console.log(playGame());
-console.log(playGame());
-console.log(playGame());
+let rock = document.querySelector('#rock');
+rock.addEventListener('click', () => playGame('rock'));
+let paper = document.querySelector('#paper');
+paper.addEventListener('click', () => playGame('paper'));
+let scissors = document.querySelector('#scissors');
+scissors.addEventListener('click', () => playGame('scissors'));
